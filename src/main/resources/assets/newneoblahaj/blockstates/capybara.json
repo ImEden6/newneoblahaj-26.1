@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newneoblahaj:block/capybara",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newneoblahaj:block/capybara"
+    },
+    "facing=south": {
+      "model": "newneoblahaj:block/capybara",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newneoblahaj:block/capybara",
+      "y": 270
+    }
+  }
+}

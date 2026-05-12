@@ -1,0 +1,13 @@
+{
+  "wants": {
+    "count": 15.0,
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "count": 1.0,
+    "id": "newneoblahaj:gray_shark"
+  },
+  "max_uses": 2.0,
+  "reputation_discount": 0.1,
+  "xp": 30.0
+}

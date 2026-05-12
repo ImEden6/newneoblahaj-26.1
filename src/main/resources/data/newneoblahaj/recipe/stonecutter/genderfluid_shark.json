@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:stonecutting",
+  "category": "misc",
+  "group": "plush_sharks",
+  "ingredient": {
+    "tag": "newneoblahaj:sharks"
+  },
+  "result": {
+    "id": "newneoblahaj:genderfluid_shark"
+  },
+  "count": 1
+}

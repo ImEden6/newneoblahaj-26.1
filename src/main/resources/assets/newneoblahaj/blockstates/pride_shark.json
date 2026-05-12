@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newneoblahaj:block/pride_shark",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newneoblahaj:block/pride_shark"
+    },
+    "facing=south": {
+      "model": "newneoblahaj:block/pride_shark",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newneoblahaj:block/pride_shark",
+      "y": 270
+    }
+  }
+}
