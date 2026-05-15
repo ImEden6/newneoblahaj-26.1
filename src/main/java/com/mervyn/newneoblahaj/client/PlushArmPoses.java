@@ -3,13 +3,13 @@ package com.mervyn.newneoblahaj.client;
 import net.minecraft.client.model.HumanoidModel;
 
 /**
- * Arm pose used when holding {@link com.mervyn.newneoblahaj.registry.ModItemTags#PLUSHIES}.
- * Minecraft 26.1 does not expose {@code ArmPose.create} on this classpath; the hug tuck is applied in
- * {@link com.mervyn.newneoblahaj.mixin.client.HumanoidModelPlushHugMixin} after crossbow-hold setup.
+ * Baseline arm pose for items in {@link com.mervyn.newneoblahaj.registry.ModItemTags#PLUSHIES}, applied from
+ * {@link com.mervyn.newneoblahaj.client.CuddlyItemClientExtensions}. This mod does not register a separate
+ * client mixin for an extra hug tuck; {@code CROSSBOW_HOLD} is the full pose here.
  */
 public final class PlushArmPoses {
     private PlushArmPoses() {}
 
-    /** Baseline pose; {@link com.mervyn.newneoblahaj.mixin.client.HumanoidModelPlushHugMixin} adds the cradle. */
+    /** See class Javadoc. */
     public static final HumanoidModel.ArmPose HELD_PLUSH = HumanoidModel.ArmPose.CROSSBOW_HOLD;
 }

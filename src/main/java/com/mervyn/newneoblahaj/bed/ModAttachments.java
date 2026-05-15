@@ -18,7 +18,7 @@ public final class ModAttachments {
         "bed_plush",
         () -> AttachmentType.builder(() -> ItemStack.EMPTY)
             .serialize(ItemStack.CODEC.fieldOf("stack"))
-            .sync(ItemStack.STREAM_CODEC)
+            .sync(ItemStack.OPTIONAL_STREAM_CODEC)
             .build()
     );
 
