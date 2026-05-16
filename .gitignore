@@ -30,6 +30,7 @@ bin/
 .vscode/
 
 ### Local / IDE ###
+potential_issues.md
 .DS_Store
 Thumbs.db
 scratch/

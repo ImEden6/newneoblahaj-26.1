@@ -18,7 +18,6 @@ Use `./gradlew runClient` or `./gradlew runServer` for a dev environment.
 
 - **`src/`** — mod sources and resources (`main` only unless you add tests).
 - **`tools/patch_render_type.py`** — optional one-off helper to add `"render_type": "cutout"` to `assets/newneoblahaj/models/block/*.json` when batch-editing models.
-- **`potential_issues.md`** — short internal notes on known gaps and resolved items (not required to play or build).
 
 `_reference_blahaj/` is listed in `.gitignore` for an optional local porting checkout and is **not** part of the published tree.
 
