@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newblahaj:block/bread",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newblahaj:block/bread"
+    },
+    "facing=south": {
+      "model": "newblahaj:block/bread",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newblahaj:block/bread",
+      "y": 270
+    }
+  }
+}

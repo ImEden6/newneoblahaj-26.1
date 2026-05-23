@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newblahaj:block/brown_bear",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newblahaj:block/brown_bear"
+    },
+    "facing=south": {
+      "model": "newblahaj:block/brown_bear",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newblahaj:block/brown_bear",
+      "y": 270
+    }
+  }
+}

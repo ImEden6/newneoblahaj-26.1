@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newblahaj:block/enby_shark",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newblahaj:block/enby_shark"
+    },
+    "facing=south": {
+      "model": "newblahaj:block/enby_shark",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newblahaj:block/enby_shark",
+      "y": 270
+    }
+  }
+}

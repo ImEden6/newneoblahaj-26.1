@@ -1,0 +1,11 @@
+{
+  "block.newblahaj.blue_shark": "Mjukleksak Haj",
+  "block.newblahaj.blue_shark.tooltip": "alias Blåhaj",
+  "block.newblahaj.gray_shark": "Mjukleksak Gråhaj",
+  "block.newblahaj.gray_shark.tooltip": "alias Klappar Haj",
+  "block.newblahaj.bread": "Brödkudde",
+  "block.newblahaj.blue_whale.tooltip": "alias Blåvingad. Kan innehålla ett föremål",
+  "block.newblahaj.blue_whale.tooltip": "alias Blåvingad. Kan innehålla en hög med föremål",
+  "tooltip.newblahaj.owner.craft": "Skapad av %s",
+  "tooltip.newblahaj.owner.rename": "%s av %s"
+}

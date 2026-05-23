@@ -1,0 +1,7 @@
+{
+  "render_type": "cutout",
+  "parent": "newblahaj:block/blue_shark",
+  "textures": {
+    "0": "newblahaj:block/pride_sharks/lesbian"
+  }
+}

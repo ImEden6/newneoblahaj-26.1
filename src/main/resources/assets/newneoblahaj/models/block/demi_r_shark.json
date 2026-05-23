@@ -1,7 +1,0 @@
-{
-  "render_type": "cutout",
-  "parent": "newneoblahaj:block/blue_shark",
-  "textures": {
-    "0": "newneoblahaj:block/pride_sharks/demi_r"
-  }
-}

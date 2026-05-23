@@ -1,0 +1,38 @@
+{
+  "block.newblahaj.cuddly_item.use.1": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.use.1",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.use.1"
+    ]
+  },
+  "block.newblahaj.cuddly_item.use.2": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.use.2",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.use.2"
+    ]
+  },
+  "block.newblahaj.cuddly_item.use.3": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.use.3",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.use.3"
+    ]
+  },
+  "block.newblahaj.cuddly_item.use.4": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.use.4",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.use.4"
+    ]
+  },
+  "block.newblahaj.cuddly_item.use.5": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.use.5",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.use.5"
+    ]
+  },
+  "block.newblahaj.cuddly_item.hit": {
+    "subtitle": "subtitles.newblahaj.block.cuddly_item.hit",
+    "sounds": [
+      "newblahaj:block.newblahaj.cuddly_item.hit"
+    ]
+  }
+}

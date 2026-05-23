@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "###",
+    "OW "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:brown_wool"
+    },
+    "O": {
+      "item": "minecraft:orange_dye"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "newblahaj:capybara"
+  }
+}
