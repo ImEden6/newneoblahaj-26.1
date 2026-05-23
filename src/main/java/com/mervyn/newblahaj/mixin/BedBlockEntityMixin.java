@@ -4,8 +4,8 @@ import com.mervyn.newblahaj.bed.BedPlushHolder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BedBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BlockEntity.class)
-public abstract class BlockEntityMixin implements BedPlushHolder {
+@Mixin(BedBlockEntity.class)
+public abstract class BedBlockEntityMixin implements BedPlushHolder {
 
     @Shadow
     protected abstract void saveAdditional(CompoundTag tag);
@@ -25,29 +25,27 @@ public abstract class BlockEntityMixin implements BedPlushHolder {
 
     @Override
     public ItemStack newblahaj$getPlushItem() {
-        return this.newblahaj$plushItem;
+        return this.newblahaj$plushItem.isEmpty() ? ItemStack.EMPTY : this.newblahaj$plushItem.copy();
     }
 
     @Override
     public void newblahaj$setPlushItem(ItemStack stack) {
-        this.newblahaj$plushItem = stack == null ? ItemStack.EMPTY : stack;
+        this.newblahaj$plushItem = stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
         ((BlockEntity) (Object) this).setChanged();
     }
 
     @Inject(method = "load", at = @At("TAIL"))
     private void newblahaj$load(CompoundTag tag, CallbackInfo ci) {
-        if ((Object) this instanceof BedBlockEntity) {
-            if (tag.contains("PlushItem", 10)) {
-                this.newblahaj$plushItem = ItemStack.of(tag.getCompound("PlushItem"));
-            } else {
-                this.newblahaj$plushItem = ItemStack.EMPTY;
-            }
+        if (tag.contains("PlushItem", 10)) {
+            this.newblahaj$plushItem = ItemStack.of(tag.getCompound("PlushItem"));
+        } else {
+            this.newblahaj$plushItem = ItemStack.EMPTY;
         }
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
     private void newblahaj$save(CompoundTag tag, CallbackInfo ci) {
-        if ((Object) this instanceof BedBlockEntity && !this.newblahaj$plushItem.isEmpty()) {
+        if (!this.newblahaj$plushItem.isEmpty()) {
             CompoundTag itemTag = new CompoundTag();
             this.newblahaj$plushItem.save(itemTag);
             tag.put("PlushItem", itemTag);
@@ -56,14 +54,14 @@ public abstract class BlockEntityMixin implements BedPlushHolder {
 
     @Inject(method = "getUpdatePacket", at = @At("HEAD"), cancellable = true)
     private void newblahaj$getUpdatePacket(CallbackInfoReturnable<ClientboundBlockEntityDataPacket> cir) {
-        if ((Object) this instanceof BedBlockEntity) {
+        if (!this.newblahaj$plushItem.isEmpty()) {
             cir.setReturnValue(ClientboundBlockEntityDataPacket.create((BlockEntity) (Object) this));
         }
     }
 
     @Inject(method = "getUpdateTag", at = @At("HEAD"), cancellable = true)
     private void newblahaj$getUpdateTag(CallbackInfoReturnable<CompoundTag> cir) {
-        if ((Object) this instanceof BedBlockEntity) {
+        if (!this.newblahaj$plushItem.isEmpty()) {
             CompoundTag tag = new CompoundTag();
             this.saveAdditional(tag);
             cir.setReturnValue(tag);

@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,5 +38,18 @@ public final class BedPlushSupport {
 
     public static Optional<BedBlockEntity> getBedBlockEntity(Level level, BlockPos pos) {
         return getBedBlockEntity(level, pos, level.getBlockState(pos));
+    }
+
+    public static void dropPlushIfPresent(Level level, BlockPos pos, BlockState state) {
+        if (level.isClientSide()) {
+            return;
+        }
+        getBedBlockEntity(level, pos, state).ifPresent(bed -> {
+            ItemStack plush = ((BedPlushHolder) bed).newblahaj$getPlushItem();
+            if (!plush.isEmpty()) {
+                Block.popResource(level, bed.getBlockPos(), plush);
+                ((BedPlushHolder) bed).newblahaj$setPlushItem(ItemStack.EMPTY);
+            }
+        });
     }
 }

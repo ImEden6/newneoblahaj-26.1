@@ -30,27 +30,6 @@ public class NewBlahaj implements ModInitializer {
 
         UseBlockCallback.EVENT.register(BedPlushEvents::onRightClickBlock);
 
-        net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents.BEFORE.register((level, player, pos, state, blockEntity) -> {
-            if (!(state.getBlock() instanceof net.minecraft.world.level.block.BedBlock)) {
-                return true;
-            }
-            java.util.Optional<net.minecraft.world.level.block.entity.BedBlockEntity> bedOpt = com.mervyn.newblahaj.bed.BedPlushSupport.getBedBlockEntity(level, pos, state);
-            if (bedOpt.isEmpty()) {
-                return true;
-            }
-            net.minecraft.world.level.block.entity.BedBlockEntity bed = bedOpt.get();
-            ItemStack plush = ((com.mervyn.newblahaj.bed.BedPlushHolder) bed).newblahaj$getPlushItem();
-            if (plush.isEmpty()) {
-                return true;
-            }
-            if (!level.isClientSide()) {
-                net.minecraft.core.BlockPos dropPos = bed.getBlockPos();
-                net.minecraft.world.level.block.Block.popResource(level, dropPos, plush.copy());
-                ((com.mervyn.newblahaj.bed.BedPlushHolder) bed).newblahaj$setPlushItem(ItemStack.EMPTY);
-            }
-            return true;
-        });
-
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             if (source.isBuiltin()) {
                 if (BuiltInLootTables.STRONGHOLD_CROSSING.equals(id) || BuiltInLootTables.STRONGHOLD_CORRIDOR.equals(id)) {

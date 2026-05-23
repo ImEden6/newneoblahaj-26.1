@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -35,14 +34,10 @@ public class CuddlyBlock extends HorizontalDirectionalBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        level.playSound(null, pos, ModSounds.getRandomSqueak(level.getRandom()), SoundSource.BLOCKS, 0.5f, 1);
+        if (!level.isClientSide()) {
+            level.playSound(null, pos, ModSounds.getRandomSqueak(level.getRandom()), SoundSource.BLOCKS, 0.5f, 1);
+        }
         return InteractionResult.sidedSuccess(level.isClientSide());
-    }
-
-    @Override
-    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
-        level.playSound(null, hit.getBlockPos(), ModSounds.BLOCK_CUDDLY_ITEM_HIT, SoundSource.BLOCKS, 0.5f, 1);
-        super.onProjectileHit(level, state, hit, projectile);
     }
 
     @Override
