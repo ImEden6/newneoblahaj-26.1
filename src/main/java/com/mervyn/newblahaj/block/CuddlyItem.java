@@ -2,67 +2,68 @@ package com.mervyn.newblahaj.block;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class CuddlyItem extends BlockItem {
 
-    private final Component subtitle;
+    private final Text subtitle;
 
-    public CuddlyItem(Block block, Properties settings, @Nullable String subtitleLangKey) {
+    public CuddlyItem(Block block, Settings settings, @Nullable String subtitleLangKey) {
         super(block, settings);
-        this.subtitle = subtitleLangKey == null ? null : Component.translatable(subtitleLangKey).withStyle(ChatFormatting.GRAY);
+        this.subtitle = subtitleLangKey == null ? null : Text.translatable(subtitleLangKey).formatted(Formatting.GRAY);
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, Level level, net.minecraft.world.entity.player.Player player) {
-        super.onCraftedBy(stack, level, player);
-        stack.getOrCreateTag().putString("Owner", player.getName().getString());
+    public void onCraft(ItemStack stack, World world, PlayerEntity player) {
+        super.onCraft(stack, world, player);
+        stack.getOrCreateNbt().putString("Owner", player.getName().getString());
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag context) {
-        super.appendHoverText(stack, level, tooltip, context);
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
         if (subtitle != null) {
             tooltip.add(subtitle);
         }
-        if (stack.hasTag() && stack.getTag().contains("Owner")) {
-            String ownerName = stack.getTag().getString("Owner");
-            Component ownerComp = Component.literal(ownerName);
-            if (stack.hasCustomHoverName()) {
-                tooltip.add(Component.translatable("tooltip.newblahaj.owner.rename", stack.getHoverName(), ownerComp).withStyle(ChatFormatting.GRAY));
+        if (stack.hasNbt() && stack.getNbt().contains("Owner")) {
+            String ownerName = stack.getNbt().getString("Owner");
+            Text ownerComp = Text.literal(ownerName);
+            if (stack.hasCustomName()) {
+                tooltip.add(Text.translatable("tooltip.newblahaj.owner.rename", stack.getName(), ownerComp).formatted(Formatting.GRAY));
             } else {
-                tooltip.add(Component.translatable("tooltip.newblahaj.owner.craft", ownerComp).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.newblahaj.owner.craft", ownerComp).formatted(Formatting.GRAY));
             }
         }
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return super.getDestroySpeed(stack, state) * 0.25f;
+    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+        return super.getMiningSpeedMultiplier(stack, state) * 0.25f;
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
-            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-            builder.putAll(super.getDefaultAttributeModifiers(slot));
-            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", -2.0, AttributeModifier.Operation.ADDITION));
+            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+            builder.putAll(super.getAttributeModifiers(slot));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", -2.0, EntityAttributeModifier.Operation.ADDITION));
             return builder.build();
         }
-        return super.getDefaultAttributeModifiers(slot);
+        return super.getAttributeModifiers(slot);
     }
 }

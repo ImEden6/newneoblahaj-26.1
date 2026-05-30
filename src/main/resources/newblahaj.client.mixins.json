@@ -2,8 +2,10 @@
 	"required": true,
 	"package": "com.mervyn.newblahaj.mixin.client",
 	"compatibilityLevel": "JAVA_17",
+	"refmap": "client-newblahaj.refmap.json",
 	"mixins": [
-		"BedRendererMixin",
+		"BipedEntityModelMixin",
+		"PlayerEntityModelMixin",
 		"PlayerRendererMixin"
 	],
 	"injectors": {

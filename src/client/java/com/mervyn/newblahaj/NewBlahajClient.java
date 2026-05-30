@@ -3,13 +3,14 @@ package com.mervyn.newblahaj;
 import com.mervyn.newblahaj.block.ModBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.block.Block;
+import net.minecraft.client.render.RenderLayer;
 
 public class NewBlahajClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         NewBlahaj.LOGGER.info("New Blåhaj client setup");
+        System.out.println("[NewBlahaj] NewBlahajClient: onInitializeClient called");
 
         registerCutout(ModBlocks.GRAY_SHARK_BLOCK);
         registerCutout(ModBlocks.BLAHAJ_BLOCK);
@@ -23,6 +24,6 @@ public class NewBlahajClient implements ClientModInitializer {
     }
 
     private void registerCutout(Block block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
     }
 }

@@ -1,9 +1,9 @@
 package com.mervyn.newblahaj;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.RandomSource;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.random.Random;
 
 public final class ModSounds {
     public static final SoundEvent CUDDLY_USE_1 = register("block.newblahaj.cuddly_item.use.1");
@@ -17,15 +17,15 @@ public final class ModSounds {
     private ModSounds() {}
 
     private static SoundEvent register(String name) {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(NewBlahaj.id(name));
-        return Registry.register(BuiltInRegistries.SOUND_EVENT, NewBlahaj.id(name), sound);
+        SoundEvent sound = SoundEvent.of(NewBlahaj.id(name));
+        return Registry.register(Registries.SOUND_EVENT, NewBlahaj.id(name), sound);
     }
 
     public static void register() {
         // Class loading registers sounds
     }
 
-    public static SoundEvent getRandomSqueak(RandomSource random) {
+    public static SoundEvent getRandomSqueak(Random random) {
         return switch (random.nextInt(5)) {
             case 0 -> CUDDLY_USE_1;
             case 1 -> CUDDLY_USE_2;

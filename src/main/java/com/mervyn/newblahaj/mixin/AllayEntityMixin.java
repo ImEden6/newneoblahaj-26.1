@@ -2,24 +2,24 @@ package com.mervyn.newblahaj.mixin;
 
 import com.mervyn.newblahaj.block.CuddlyItem;
 import com.mervyn.newblahaj.registry.ModItemTags;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.animal.allay.Allay;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Allay.class)
+@Mixin(AllayEntity.class)
 public class AllayEntityMixin {
 
-    @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
-    public void preventTakePlush(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
-        ItemStack held = player.getItemInHand(hand);
-        if (held.getItem() instanceof CuddlyItem || held.is(ModItemTags.PLUSHIES)) {
-            info.setReturnValue(InteractionResult.PASS);
+    @Inject(method = "interactMob", at = @At("HEAD"), cancellable = true)
+    public void preventTakePlush(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> info) {
+        ItemStack held = player.getStackInHand(hand);
+        if (held.getItem() instanceof CuddlyItem || held.isIn(ModItemTags.PLUSHIES)) {
+            info.setReturnValue(ActionResult.PASS);
             info.cancel();
         }
     }
