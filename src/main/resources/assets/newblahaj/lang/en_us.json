@@ -39,7 +39,9 @@
   "subtitles.newblahaj.block.cuddly_item.use.3": "mmm eee",
   "subtitles.newblahaj.block.cuddly_item.use.4": "Squeaking Toy",
   "subtitles.newblahaj.block.cuddly_item.use.5": "Toy Squirming",
-  "subtitles.newblahaj.block.cuddly_item.hit": "Plush Getting shot",
+  "subtitles.newblahaj.block.cuddly_item.hit": "Plush Getting Shot",
   "block.newblahaj.capybara": "Capy \"Chupy\" Bara",
-  "block.newblahaj.capybara.tooltip": "a.k.a. Carpincho"
+  "block.newblahaj.capybara.tooltip": "a.k.a. Carpincho",
+  "block.newblahaj.creature": "Soft Toy Dog",
+  "block.newblahaj.creature.tooltip": "a.k.a. Creature"
 }

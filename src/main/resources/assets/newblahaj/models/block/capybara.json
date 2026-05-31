@@ -1,6 +1,6 @@
 {
-	"format_version": "1.21.11",
-	"credit": "Antigravity AI - Python Generated",
+	"format_version": "1.20.1",
+	"credit": "Mervyn",
 	"render_type": "cutout",
 	"texture_size": [64, 64],
 	"textures": {
