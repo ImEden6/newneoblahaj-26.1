@@ -18,6 +18,8 @@ public class NewBlahajClient implements ClientModInitializer {
         registerCutout(ModBlocks.BREAD_BLOCK);
         registerCutout(ModBlocks.BROWN_BEAR_BLOCK);
         registerCutout(ModBlocks.CAPYBARA_BLOCK);
+        registerCutout(ModBlocks.CREATURE_BLOCK);
+
         for (Block block : ModBlocks.PRIDE_BLOCKS) {
             registerCutout(block);
         }

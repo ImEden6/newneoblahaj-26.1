@@ -32,6 +32,10 @@ public final class ModBlocks {
     public static final Block CAPYBARA_BLOCK = registerBlock("capybara", new CuddlyBlock(AbstractBlock.Settings.copy(Blocks.BROWN_WOOL).nonOpaque()));
     public static final Item CAPYBARA_ITEM = registerItem("capybara", new CuddlyItem(CAPYBARA_BLOCK, new Item.Settings().maxCount(1), "block.newblahaj.capybara.tooltip"));
 
+    public static final Block CREATURE_BLOCK = registerBlock("creature", new CuddlyBlock(AbstractBlock.Settings.copy(Blocks.BLACK_WOOL).nonOpaque()));
+    public static final Item CREATURE_ITEM = registerItem("creature", new CuddlyItem(CREATURE_BLOCK, new Item.Settings().maxCount(1), "block.newblahaj.creature.tooltip"));
+
+
     public static final List<String> PRIDE_NAMES = List.of(
         "ace", "agender", "aro", "aroace", "bi", "demiboy", "demigirl",
         "demi_r", "demi_s", "enby", "gay", "genderfluid", "genderqueer", "greyrose",
@@ -67,6 +71,8 @@ public final class ModBlocks {
             content.add(BREAD_ITEM);
             content.add(BROWN_BEAR_ITEM);
             content.add(CAPYBARA_ITEM);
+            content.add(CREATURE_ITEM);
+
             for (Item item : PRIDE_ITEMS) {
                 content.add(item);
             }

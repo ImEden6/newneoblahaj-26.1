@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "newblahaj:block/creature",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "newblahaj:block/creature"
+    },
+    "facing=south": {
+      "model": "newblahaj:block/creature",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "newblahaj:block/creature",
+      "y": 270
+    }
+  }
+}
