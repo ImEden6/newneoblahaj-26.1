@@ -7,18 +7,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public final class BedPlushEvents {
     private BedPlushEvents() {}
@@ -34,25 +35,29 @@ public final class BedPlushEvents {
         if (!(state.getBlock() instanceof BedBlock)) {
             return;
         }
-        Optional<BedBlockEntity> bedOpt = BedPlushSupport.getBedBlockEntity(level, pos, state);
-        if (bedOpt.isEmpty()) {
+        Optional<BlockPos> headPosOpt = BedPlushSupport.getBedHeadPos(level, pos, state);
+        if (headPosOpt.isEmpty()) {
             return;
         }
-        BedBlockEntity bed = bedOpt.get();
+        BlockPos headPos = headPosOpt.get();
         Player player = event.getEntity();
         InteractionHand hand = event.getHand();
         ItemStack held = player.getItemInHand(hand);
-        ItemStack onBed = bed.getData(ModAttachments.BED_PLUSH.get());
+
+        BedPlushData data = level.getData(ModAttachments.BED_PLUSHES.get());
+        Map<BlockPos, ItemStack> plushes = data.plushes();
+        ItemStack onBed = plushes.getOrDefault(headPos, ItemStack.EMPTY);
 
         if (player.isShiftKeyDown() && held.isEmpty() && !onBed.isEmpty()) {
             if (!player.mayInteract(serverLevel, pos)) {
                 return;
             }
             giveOrDrop(level, pos, player, onBed.copy());
-            bed.removeData(ModAttachments.BED_PLUSH.get());
-            bed.setChanged();
-            BlockPos headPos = bed.getBlockPos();
-            level.sendBlockUpdated(headPos, level.getBlockState(headPos), level.getBlockState(headPos), 3);
+            
+            Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
+            newMap.remove(headPos);
+            level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
+            
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             return;
@@ -66,10 +71,11 @@ public final class BedPlushEvents {
                 giveOrDrop(level, pos, player, onBed.copy());
             }
             ItemStack toPlace = held.split(1);
-            bed.setData(ModAttachments.BED_PLUSH.get(), toPlace);
-            bed.setChanged();
-            BlockPos headPos = bed.getBlockPos();
-            level.sendBlockUpdated(headPos, level.getBlockState(headPos), level.getBlockState(headPos), 3);
+            
+            Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
+            newMap.put(headPos, toPlace);
+            level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
+            
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }
@@ -90,17 +96,21 @@ public final class BedPlushEvents {
         if (!(state.getBlock() instanceof BedBlock)) {
             return;
         }
-        Optional<BedBlockEntity> bedOpt = BedPlushSupport.getBedBlockEntity(level, event.getPos(), state);
-        if (bedOpt.isEmpty()) {
+        Optional<BlockPos> headPosOpt = BedPlushSupport.getBedHeadPos(level, event.getPos(), state);
+        if (headPosOpt.isEmpty()) {
             return;
         }
-        BedBlockEntity bed = bedOpt.get();
-        ItemStack plush = bed.getData(ModAttachments.BED_PLUSH.get());
-        if (plush.isEmpty()) {
+        BlockPos headPos = headPosOpt.get();
+        BedPlushData data = level.getData(ModAttachments.BED_PLUSHES.get());
+        Map<BlockPos, ItemStack> plushes = data.plushes();
+        ItemStack plush = plushes.get(headPos);
+        if (plush == null || plush.isEmpty()) {
             return;
         }
-        BlockPos dropPos = bed.getBlockPos();
-        Block.popResource(level, dropPos, plush.copy());
-        bed.removeData(ModAttachments.BED_PLUSH.get());
+        Block.popResource(level, headPos, plush.copy());
+        
+        Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
+        newMap.remove(headPos);
+        level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
     }
 }

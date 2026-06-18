@@ -157,8 +157,8 @@
 		},
 		"gui": {
 			"rotation": [30, 135, 0],
-			"translation": [0.19, 5, 0],
-			"scale": [1.15, 1.15, 1.15]
+			"translation": [0.0, 3.0, 0],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"head": {
 			"translation": [0, 16, 0],

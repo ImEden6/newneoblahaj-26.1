@@ -4,11 +4,9 @@ import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 
@@ -18,7 +16,7 @@ public final class BedPlushSupport {
     /**
      * We prefer keeping the plushie at the head of the bed (near the pillow).
      */
-    public static Optional<BedBlockEntity> getBedBlockEntity(LevelAccessor level, BlockPos pos, BlockState state) {
+    public static Optional<BlockPos> getBedHeadPos(LevelAccessor level, BlockPos pos, BlockState state) {
         if (!(state.getBlock() instanceof BedBlock)) {
             return Optional.empty();
         }
@@ -28,13 +26,10 @@ public final class BedPlushSupport {
         if (!(level.getBlockState(headPos).getBlock() instanceof BedBlock)) {
             return Optional.empty();
         }
-        if (level.getBlockEntity(headPos) instanceof BedBlockEntity bed) {
-            return Optional.of(bed);
-        }
-        return Optional.empty();
+        return Optional.of(headPos);
     }
 
-    public static Optional<BedBlockEntity> getBedBlockEntity(Level level, BlockPos pos) {
-        return getBedBlockEntity(level, pos, level.getBlockState(pos));
+    public static Optional<BlockPos> getBedHeadPos(LevelAccessor level, BlockPos pos) {
+        return getBedHeadPos(level, pos, level.getBlockState(pos));
     }
 }

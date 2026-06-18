@@ -6,8 +6,8 @@
     "AllayEntityMixin"
   ],
   "client": [
-    "client.BedRendererMixin"
   ],
+
   "injectors": {
     "defaultRequire": 1
   },
