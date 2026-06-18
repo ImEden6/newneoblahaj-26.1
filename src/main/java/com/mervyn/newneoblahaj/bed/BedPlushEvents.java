@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 public final class BedPlushEvents {
@@ -54,9 +53,8 @@ public final class BedPlushEvents {
             }
             giveOrDrop(level, pos, player, onBed.copy());
             
-            Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
-            newMap.remove(headPos);
-            level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
+            plushes.remove(headPos);
+            level.setData(ModAttachments.BED_PLUSHES.get(), data);
             
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
@@ -72,9 +70,8 @@ public final class BedPlushEvents {
             }
             ItemStack toPlace = held.split(1);
             
-            Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
-            newMap.put(headPos, toPlace);
-            level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
+            plushes.put(headPos, toPlace);
+            level.setData(ModAttachments.BED_PLUSHES.get(), data);
             
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
@@ -109,8 +106,7 @@ public final class BedPlushEvents {
         }
         Block.popResource(level, headPos, plush.copy());
         
-        Map<BlockPos, ItemStack> newMap = new ConcurrentHashMap<>(plushes);
-        newMap.remove(headPos);
-        level.setData(ModAttachments.BED_PLUSHES.get(), new BedPlushData(newMap));
+        plushes.remove(headPos);
+        level.setData(ModAttachments.BED_PLUSHES.get(), data);
     }
 }

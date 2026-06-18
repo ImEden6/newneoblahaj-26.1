@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class BedPlushRenderer {
     public static final ContextKey<BedPlushRenderState> BED_PLUSHES_KEY = new ContextKey<>(NewNeoBlahaj.id("bed_plushes"));
     private static final Map<BlockPos, ItemStackRenderState> STATE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<BlockPos, ItemStack> STACK_CACHE = new ConcurrentHashMap<>();
 
     private BedPlushRenderer() {}
 
@@ -51,11 +52,18 @@ public final class BedPlushRenderer {
         BedPlushData data = level.getData(ModAttachments.BED_PLUSHES.get());
         if (data == null || data.plushes().isEmpty()) {
             STATE_CACHE.clear();
+            STACK_CACHE.clear();
             return;
         }
 
         // Remove cached states for positions that no longer have plushies
-        STATE_CACHE.keySet().removeIf(pos -> !data.plushes().containsKey(pos));
+        STATE_CACHE.keySet().removeIf(pos -> {
+            if (!data.plushes().containsKey(pos)) {
+                STACK_CACHE.remove(pos);
+                return true;
+            }
+            return false;
+        });
 
         BedPlushRenderState renderState = new BedPlushRenderState();
         Minecraft mc = Minecraft.getInstance();
@@ -79,14 +87,18 @@ public final class BedPlushRenderer {
             // Fetch or create the ItemStackRenderState from cache
             ItemStackRenderState itemState = STATE_CACHE.computeIfAbsent(headPos, k -> new ItemStackRenderState());
 
-            mc.getItemModelResolver().updateForTopItem(
-                itemState,
-                plush,
-                ItemDisplayContext.FIXED,
-                level,
-                null,
-                0
-            );
+            ItemStack lastKnown = STACK_CACHE.get(headPos);
+            if (lastKnown == null || !ItemStack.matches(lastKnown, plush)) {
+                mc.getItemModelResolver().updateForTopItem(
+                    itemState,
+                    plush,
+                    ItemDisplayContext.FIXED,
+                    level,
+                    null,
+                    0
+                );
+                STACK_CACHE.put(headPos, plush.copy());
+            }
 
             BedPlushRenderState.PlushEntry plushEntry = new BedPlushRenderState.PlushEntry(headPos, facing, occupied, lightCoords, itemState);
             renderState.entries.add(plushEntry);
@@ -116,25 +128,25 @@ public final class BedPlushRenderer {
             poseStack.pushPose();
 
             // Translate relative to camera pos
-            poseStack.translate(entry.headPos.getX() - camX, entry.headPos.getY() - camY, entry.headPos.getZ() - camZ);
+            poseStack.translate(entry.headPos().getX() - camX, entry.headPos().getY() - camY, entry.headPos().getZ() - camZ);
 
             // Base translation to block center and height
             poseStack.translate(0.5, 0.75, 0.5);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-entry.facing.toYRot()));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-entry.facing().toYRot()));
 
             // Offset on the pillow (0.25 units toward the head)
             poseStack.translate(0, 0, 0.25);
 
             // Nestle under sleeper head when bed is occupied
-            if (entry.occupied) {
+            if (entry.occupied()) {
                 poseStack.translate(0, -0.125, 0.1);
             }
 
             // Submit the item state
-            entry.itemRenderState.submit(
+            entry.itemRenderState().submit(
                 poseStack,
                 submitNodeCollector,
-                entry.lightCoords,
+                entry.lightCoords(),
                 OverlayTexture.NO_OVERLAY,
                 0
             );
@@ -145,26 +157,16 @@ public final class BedPlushRenderer {
 
     @SubscribeEvent
     public static void onLevelUnload(LevelEvent.Unload event) {
+        if (!(event.getLevel() instanceof ClientLevel)) {
+            return;
+        }
         STATE_CACHE.clear();
+        STACK_CACHE.clear();
     }
 
-    public static class BedPlushRenderState {
-        public final List<PlushEntry> entries = new ArrayList<>();
+    static class BedPlushRenderState {
+        final List<PlushEntry> entries = new ArrayList<>();
 
-        public static class PlushEntry {
-            public final BlockPos headPos;
-            public final Direction facing;
-            public final boolean occupied;
-            public final int lightCoords;
-            public final ItemStackRenderState itemRenderState;
-
-            public PlushEntry(BlockPos headPos, Direction facing, boolean occupied, int lightCoords, ItemStackRenderState itemRenderState) {
-                this.headPos = headPos;
-                this.facing = facing;
-                this.occupied = occupied;
-                this.lightCoords = lightCoords;
-                this.itemRenderState = itemRenderState;
-            }
-        }
+        record PlushEntry(BlockPos headPos, Direction facing, boolean occupied, int lightCoords, ItemStackRenderState itemRenderState) {}
     }
 }

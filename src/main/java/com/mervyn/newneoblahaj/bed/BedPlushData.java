@@ -21,7 +21,9 @@ public record BedPlushData(Map<BlockPos, ItemStack> plushes) {
                     if (parts.length == 3) {
                         map.put(new BlockPos(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2])), v);
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception e) {
+                    com.mojang.logging.LogUtils.getLogger().warn("Skipping malformed bed plush key '{}': {}", k, e.getMessage());
+                }
             });
             return new BedPlushData(map);
         },
@@ -37,7 +39,7 @@ public record BedPlushData(Map<BlockPos, ItemStack> plushes) {
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BedPlushData> STREAM_CODEC = StreamCodec.composite(
-        ByteBufCodecs.map(HashMap::new, BlockPos.STREAM_CODEC, ItemStack.OPTIONAL_STREAM_CODEC),
+        ByteBufCodecs.map(ConcurrentHashMap::new, BlockPos.STREAM_CODEC, ItemStack.OPTIONAL_STREAM_CODEC),
         BedPlushData::plushes,
         BedPlushData::new
     );

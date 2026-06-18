@@ -22,6 +22,8 @@ public final class BedPlushSupport {
         }
         BedPart part = state.getValue(BedBlock.PART);
         Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
+        // In vanilla BedBlock, the foot part's FACING direction points toward the head part.
+        // So from the foot, pos.relative(facing) always yields the head position.
         BlockPos headPos = part == BedPart.HEAD ? pos : pos.relative(facing);
         if (!(level.getBlockState(headPos).getBlock() instanceof BedBlock)) {
             return Optional.empty();
