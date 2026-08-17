@@ -4,6 +4,12 @@ All notable changes to **New Blåhaj** (`newblahaj`) for Minecraft **Fabric 1.20
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-17
+
+### Added
+
+- **Bed plushies**: place a plushie on a bed's pillow with right-click, and retrieve it with shift-right-click. It nestles aside instead of clipping into you when you sleep, and drops as an item if the bed is destroyed.
+
 ## [1.0.10] - 2026-06-09
 
 ### Added

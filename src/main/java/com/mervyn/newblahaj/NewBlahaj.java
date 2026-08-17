@@ -1,7 +1,10 @@
 package com.mervyn.newblahaj;
 
+import com.mervyn.newblahaj.bed.BedPlushEvents;
 import com.mervyn.newblahaj.block.ModBlocks;
+import com.mervyn.newblahaj.net.BedPlushNetworking;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.minecraft.loot.LootPool;
@@ -24,6 +27,9 @@ public class NewBlahaj implements ModInitializer {
 
         ModSounds.register();
         ModBlocks.register();
+
+        UseBlockCallback.EVENT.register(BedPlushEvents::onUseBlock);
+        BedPlushNetworking.registerServer();
 
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             if (!source.isBuiltin()) {

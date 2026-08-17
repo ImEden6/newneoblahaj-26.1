@@ -5,6 +5,7 @@
 	"refmap": "newblahaj.refmap.json",
 	"mixins": [
 		"AllayEntityMixin",
+		"BedBlockMixin",
 		"CuddlyBlockProjectileMixin"
 	],
 	"injectors": {

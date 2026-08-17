@@ -1,6 +1,7 @@
 package com.mervyn.newblahaj;
 
 import com.mervyn.newblahaj.block.ModBlocks;
+import com.mervyn.newblahaj.net.BedPlushClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Block;
@@ -23,6 +24,8 @@ public class NewBlahajClient implements ClientModInitializer {
         for (Block block : ModBlocks.PRIDE_BLOCKS) {
             registerCutout(block);
         }
+
+        BedPlushClientNetworking.registerClient();
     }
 
     private void registerCutout(Block block) {

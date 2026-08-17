@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "client-newblahaj.refmap.json",
 	"mixins": [
+		"BedRendererMixin",
 		"BipedEntityModelMixin",
 		"PlayerEntityModelMixin",
 		"PlayerRendererMixin"
