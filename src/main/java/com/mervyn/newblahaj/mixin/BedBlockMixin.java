@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * {@code onStateReplaced} is declared on {@link AbstractBlock}, not {@link Block} or
- * {@link BedBlock} - {@code BedBlock} does not override it in 1.20.1, so this has to
- * mixin into the declaring class and instance-check, rather than mixing into BedBlock
- * directly (which would fail to apply: the method isn't present in BedBlock's own
- * bytecode to inject into).
+ * {@link BedBlock}. {@code BedBlock} does not override it in 1.20.1, so this mixes into
+ * the declaring class and checks the instance type, rather than mixing into BedBlock
+ * directly. Mixing into BedBlock directly would fail to apply, since the method isn't
+ * present in BedBlock's own bytecode to inject into.
  */
 @Mixin(AbstractBlock.class)
 public class BedBlockMixin {
@@ -40,10 +40,10 @@ public class BedBlockMixin {
             // not cascading a bed's two halves together on removal.
             return;
         }
-        // pos IS the head here, straight from the pre-removal state - do not re-resolve it
-        // through BedPlushSupport.getBedHeadPos(), which re-checks world.getBlockState(pos):
-        // by the time onStateReplaced fires, the chunk storage already reflects newState
-        // (air) at pos, so that check would always fail here and silently no-op.
+        // pos is the head here, straight from the pre-removal state. Do not re-resolve it
+        // through BedPlushSupport.getBedHeadPos(), which re-checks world.getBlockState(pos).
+        // By the time onStateReplaced fires, chunk storage already reflects newState (air)
+        // at pos, so that check would always fail here and silently no-op.
         BlockPos headPos = pos;
         ServerWorld serverWorld = (ServerWorld) world;
         BedPlushState plushState = BedPlushState.get(serverWorld);

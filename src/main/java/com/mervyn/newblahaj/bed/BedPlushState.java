@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
 /**
  * One instance per {@link ServerWorld}, so a bed at the same {@link BlockPos} in two
  * different dimensions never shares plush data. Only ever holds entries for beds that
- * currently have a plush on them - empty stacks are never stored.
+ * currently have a plush on them. Empty stacks are never stored.
  */
 public final class BedPlushState extends PersistentState {
     private static final String ID = "newblahaj_bed_plushes";

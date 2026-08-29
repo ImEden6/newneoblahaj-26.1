@@ -8,8 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Client only ever renders one world at a time, so this doesn't need to be keyed by
- * dimension - it just needs to be emptied on disconnect so a bed doesn't keep rendering
- * a plush left over from a previous session/server (see BED_PLUSH_SPEC.md test checklist).
+ * dimension. It just needs to be emptied whenever the current world's plush data goes
+ * stale, on disconnect or on a dimension change (see BedPlushNetworking's clear channel),
+ * so a bed doesn't keep rendering a plush left over from a previous world.
  */
 public final class BedPlushClientCache {
     private static final Map<BlockPos, ItemStack> PLUSHES = new ConcurrentHashMap<>();

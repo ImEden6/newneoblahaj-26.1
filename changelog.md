@@ -4,6 +4,14 @@ All notable changes to **New Blåhaj** (`newblahaj`) for Minecraft **Fabric 1.20
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-08-29
+
+### Fixed
+
+- **Bed plushies** could go stale or disappear when traveling between dimensions (like through a nether portal) - they now stay in sync wherever you go.
+- Sneaking at an empty bed with an empty hand could wrongly feel like it did something - it's now a normal bed interaction again.
+- Placing a plushie on a bed in **creative mode** no longer removes it from your inventory.
+
 ## [1.1.0] - 2026-08-17
 
 ### Added

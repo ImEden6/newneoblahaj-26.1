@@ -17,9 +17,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public final class BedPlushEvents {
     private BedPlushEvents() {}
+
+    // Common code can't depend on the client source set. The client entrypoint
+    // (BedPlushClientNetworking.registerClient) injects the real cache lookup here so the
+    // client-side prediction branch below can mirror the server's eligibility checks exactly
+    // instead of guessing at them. Never consulted on a dedicated server.
+    private static Function<BlockPos, ItemStack> clientPlushLookup = pos -> ItemStack.EMPTY;
+
+    public static void setClientPlushLookup(Function<BlockPos, ItemStack> lookup) {
+        clientPlushLookup = lookup;
+    }
 
     public static ActionResult onUseBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         BlockPos pos = hitResult.getBlockPos();
@@ -37,8 +48,8 @@ public final class BedPlushEvents {
         if (world.isClient()) {
             // Real mutation happens server-side only; avoid double-applying on the client's
             // predicted side of the interaction.
-            boolean wouldAct = (player.isSneaking() && held.isEmpty())
-                || held.getItem() instanceof CuddlyItem || held.isIn(ModItemTags.PLUSHIES);
+            ItemStack onBed = clientPlushLookup.apply(headPos);
+            boolean wouldAct = isRemovalAttempt(player, held, onBed) || isPlacementAttempt(held);
             return wouldAct ? ActionResult.SUCCESS : ActionResult.PASS;
         }
 
@@ -46,24 +57,32 @@ public final class BedPlushEvents {
         BedPlushState plushState = BedPlushState.get(serverWorld);
         ItemStack onBed = plushState.getPlush(headPos);
 
-        if (player.isSneaking() && held.isEmpty() && !onBed.isEmpty()) {
+        if (isRemovalAttempt(player, held, onBed)) {
             giveOrDrop(world, headPos, player, onBed.copy());
             plushState.removePlush(headPos);
             BedPlushNetworking.broadcastRemoval(serverWorld, headPos);
             return ActionResult.success(false);
         }
 
-        if (held.getItem() instanceof CuddlyItem || held.isIn(ModItemTags.PLUSHIES)) {
+        if (isPlacementAttempt(held)) {
             if (!onBed.isEmpty()) {
                 giveOrDrop(world, headPos, player, onBed.copy());
             }
-            ItemStack toPlace = held.split(1);
+            ItemStack toPlace = player.getAbilities().creativeMode ? held.copyWithCount(1) : held.split(1);
             plushState.setPlush(headPos, toPlace);
             BedPlushNetworking.broadcastPlacement(serverWorld, headPos, toPlace);
             return ActionResult.success(false);
         }
 
         return ActionResult.PASS;
+    }
+
+    private static boolean isRemovalAttempt(PlayerEntity player, ItemStack held, ItemStack onBed) {
+        return player.isSneaking() && held.isEmpty() && !onBed.isEmpty();
+    }
+
+    private static boolean isPlacementAttempt(ItemStack held) {
+        return held.getItem() instanceof CuddlyItem || held.isIn(ModItemTags.PLUSHIES);
     }
 
     private static void giveOrDrop(World world, BlockPos pos, PlayerEntity player, ItemStack stack) {
